@@ -3,24 +3,21 @@ package com.example.rxrepositorytutorial
 import android.app.Application
 import androidx.room.Room
 import com.example.rxrepositorytutorial.api.BASE_URL
+import com.example.rxrepositorytutorial.api.CONNECTION_TIMEOUT_SECONDS
 import com.example.rxrepositorytutorial.api.UserApi
 import com.example.rxrepositorytutorial.db.AppDatabase
-import com.example.rxrepositorytutorial.repo.UserRepository
-import com.example.rxrepositorytutorial.view_model.UsersViewModel
+import com.example.rxrepositorytutorial.user.repo.UserLocalDS
+import com.example.rxrepositorytutorial.user.repo.UserRemoteDS
+import com.example.rxrepositorytutorial.user.repo.UserRepository
+import com.example.rxrepositorytutorial.user.view_model.UsersVM
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.GsonBuilder
-import com.google.gson.Gson
-
-import com.example.rxrepositorytutorial.api.CONNECTION_TIMEOUT_SECONDS
-import com.example.rxrepositorytutorial.user.UserLocalDS
-import com.example.rxrepositorytutorial.user.UserRemoteDS
-import com.example.rxrepositorytutorial.user.UserRepo
-import com.example.rxrepositorytutorial.view_model.UsersVM
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import java.text.DateFormat
 import java.util.concurrent.TimeUnit
 
@@ -34,13 +31,12 @@ class App : Application() {
         private lateinit var userApi: UserApi
         private lateinit var appDatabase: AppDatabase
         private lateinit var userRepository: UserRepository
-        private lateinit var usersViewModel: UsersViewModel
         private lateinit var usersVM: UsersVM
         private lateinit var gson: Gson
 
         fun injectUserApi() = userApi
         fun injectUserDao() = appDatabase.userDao()
-        fun injectUsersViewModel() = usersViewModel
+        fun injectUsersViewModel() = usersVM
         fun injectGson() = gson
     }
 
@@ -77,8 +73,13 @@ class App : Application() {
 
         userApi = retrofit.create(UserApi::class.java)
         appDatabase = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "RXRepoTest").build()
-        userRepository = UserRepository(userApi, appDatabase.userDao())
-        usersViewModel = UsersViewModel(userRepository)
+
+
+        userRepository = UserRepository(
+            UserRemoteDS(),
+            UserLocalDS()
+        )
+        usersVM = UsersVM(userRepository)
 
 
     }

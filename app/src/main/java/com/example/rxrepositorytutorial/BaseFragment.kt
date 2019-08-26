@@ -1,4 +1,4 @@
-package com.example.rxrepositorytutorial.view
+package com.example.rxrepositorytutorial
 
 import androidx.fragment.app.Fragment
 import io.reactivex.disposables.CompositeDisposable

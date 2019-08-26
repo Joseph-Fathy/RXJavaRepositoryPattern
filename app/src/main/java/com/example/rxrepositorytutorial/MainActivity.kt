@@ -3,7 +3,7 @@ package com.example.rxrepositorytutorial
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.rxrepositorytutorial.view.MainFragment
+import com.example.rxrepositorytutorial.user.view.UsersFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.frag_container, MainFragment()).commit()
+                .replace(R.id.frag_container, UsersFragment()).commit()
         }
     }
 }

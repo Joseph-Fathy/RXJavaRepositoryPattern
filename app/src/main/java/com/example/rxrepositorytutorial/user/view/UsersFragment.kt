@@ -1,18 +1,20 @@
-package com.example.rxrepositorytutorial.view
+package com.example.rxrepositorytutorial.user.view
 
 import android.os.Bundle
+import android.service.carrier.CarrierIdentifier
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.example.rxrepositorytutorial.App
+import com.example.rxrepositorytutorial.BaseFragment
 import com.example.rxrepositorytutorial.R
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.users_fragment.*
 
-class MainFragment : BaseFragment() {
+class UsersFragment : BaseFragment() {
 
 
     private val viewModel = App.injectUsersViewModel()
@@ -30,17 +32,18 @@ class MainFragment : BaseFragment() {
 
         viewModel.responseLiveData.observe(this, Observer { it?.let { it1 -> handleResponse(it1) } })
         progress.visibility = View.GONE
-        button.setOnClickListener {
-            start()
+        response.setOnClickListener {
+            getUser()
         }
 
     }
 
     override fun onStart() {
         super.onStart()
+        getAll()
     }
 
-    private fun start(){
+    private fun getAll() {
         subscribe(
             viewModel.getUsers()
                 .subscribeOn(Schedulers.io())
@@ -50,6 +53,33 @@ class MainFragment : BaseFragment() {
                         Log.wtf("RXRepo", "MainFragment__Number Users Found  = ${it.users.size} users")
                     else
                         Log.wtf("RXRepo", "MainFragment__Error = ${it.throwable?.message}")
+
+                }, {
+                    handleError(it)
+                })
+
+        )
+    }
+
+    private fun getUser() {
+        subscribe(
+            viewModel.getUsers()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap {
+                    if (it.users != null)
+                        Log.wtf("RXRepo", "MainFragment__Number Users Found  = ${it.users.size} users")
+                    else
+                        Log.wtf("RXRepo", "MainFragment__Error = ${it.throwable?.message}")
+
+
+                    viewModel.getUserWithId(it?.users[0]?.userId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                }
+                .subscribe({
+                    if (it != null)
+                        Log.wtf("RXRepo", "MainFragment__User Found  = ${it?.user?.userId}")
+                    else
+                        Log.wtf("RXRepo", "MainFragment__Error = ${it?.throwable?.message}")
                 }, {
                     handleError(it)
                 })

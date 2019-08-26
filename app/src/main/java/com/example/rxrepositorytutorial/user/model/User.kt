@@ -1,4 +1,4 @@
-package com.example.rxrepositorytutorial.model
+package com.example.rxrepositorytutorial.user.model
 
 
 import androidx.room.ColumnInfo

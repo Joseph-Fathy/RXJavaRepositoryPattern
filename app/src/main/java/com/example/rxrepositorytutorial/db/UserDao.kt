@@ -4,11 +4,14 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.rxrepositorytutorial.model.User
+import com.example.rxrepositorytutorial.user.model.User
 import io.reactivex.Single
 
 @Dao
 interface UserDao {
+    @Query("select * from users where user_id = :identifier limit 1")
+    fun getUser(identifier: String): Single<User>
+
     @Query("select * from users")
     fun getUsers(): Single<List<User>>
 
