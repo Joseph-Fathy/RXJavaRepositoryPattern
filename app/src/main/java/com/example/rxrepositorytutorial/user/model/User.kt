@@ -11,17 +11,17 @@ data class User(
     @PrimaryKey
     @ColumnInfo(name = "user_id")
     @SerializedName("user_id")
-    var userId: String,
+    var userId: String="",
 
     @ColumnInfo(name = "name")
     @SerializedName("name")
-    var name: String,
+    var name: String="",
 
     @ColumnInfo(name = "email")
     @SerializedName("email")
-    var email: String,
+    var email: String="",
 
     @ColumnInfo(name = "phone")
     @SerializedName("phone")
-    var phone: String
+    var phone: String=""
 )

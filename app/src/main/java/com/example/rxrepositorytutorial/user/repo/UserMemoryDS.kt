@@ -18,9 +18,13 @@ class UserMemoryDS private constructor() : MemoryDSRemove<User> {
     }
 
     override fun get(identifier: String): Observable<User> {
+        Log.wtf("RXRepo", "UserMemoryDS - Getting User with id: $identifier from Memory..... ")
+
         if (!userList.isNullOrEmpty()) {
             for (user in userList!!) {
                 if (user.userId.equals(identifier, true)) {
+                    Log.wtf("RXRepo", "UserMemoryDS - Found ${user!!.email} Items In Memory..... ")
+
                     return Observable.just(user)
                 }
             }

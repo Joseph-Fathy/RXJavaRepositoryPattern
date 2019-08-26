@@ -12,5 +12,5 @@ class UserRepository(var remoteDS: UserRemoteDS, var localDS: UserLocalDS) : Bas
             .doOnNext { memoryDS.saveAll(it) }
     }
 
-    fun getUserWithId(identifier: String) = get(identifier)
+    fun getUserWithId(identifier: String): Observable<User> = Observable.concat(memoryDS.get(identifier),get(identifier)).first(User()).toObservable()
 }
