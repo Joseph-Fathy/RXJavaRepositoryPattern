@@ -5,8 +5,10 @@ import androidx.room.Room
 import com.example.rxrepositorytutorial.api.BASE_URL
 import com.example.rxrepositorytutorial.api.CONNECTION_TIMEOUT_SECONDS
 import com.example.rxrepositorytutorial.api.UserApi
+import com.example.rxrepositorytutorial.base_repository.DefaultCachingPolicy
 import com.example.rxrepositorytutorial.db.AppDatabase
 import com.example.rxrepositorytutorial.user.repo.UserLocalDS
+import com.example.rxrepositorytutorial.user.repo.UserMemoryDS
 import com.example.rxrepositorytutorial.user.repo.UserRemoteDS
 import com.example.rxrepositorytutorial.user.repo.UserRepository
 import com.example.rxrepositorytutorial.user.view_model.UsersVM
@@ -77,7 +79,9 @@ class App : Application() {
 
         userRepository = UserRepository(
             UserRemoteDS(),
-            UserLocalDS()
+            UserLocalDS(),
+            UserMemoryDS.getInstance(),
+            DefaultCachingPolicy()
         )
         usersVM = UsersVM(userRepository)
 

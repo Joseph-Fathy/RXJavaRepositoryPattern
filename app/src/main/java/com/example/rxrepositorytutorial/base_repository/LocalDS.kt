@@ -5,5 +5,5 @@ import com.example.rxrepositorytutorial.datasources.GetItemDS
 import com.example.rxrepositorytutorial.datasources.SaveAllItemsDS
 import com.example.rxrepositorytutorial.datasources.SaveItemDS
 
-interface MemoryDSRemove<T : Any> : GetItemDS<T>,
+interface LocalDS<T : Any> : GetItemDS<T>,
     GetAllItemsDS<T>, SaveItemDS<T>, SaveAllItemsDS<T>

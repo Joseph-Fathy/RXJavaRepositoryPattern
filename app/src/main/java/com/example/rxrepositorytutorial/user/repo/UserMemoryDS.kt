@@ -1,12 +1,12 @@
 package com.example.rxrepositorytutorial.user.repo
 
 import android.util.Log
-import com.example.rxrepositorytutorial.base_repository.MemoryDSRemove
+import com.example.rxrepositorytutorial.base_repository.LocalDS
 import com.example.rxrepositorytutorial.user.model.User
 import io.reactivex.Observable
 
 
-class UserMemoryDS private constructor() : MemoryDSRemove<User> {
+class UserMemoryDS private constructor() : LocalDS<User> {
 
     var userList: List<User>? = null
 

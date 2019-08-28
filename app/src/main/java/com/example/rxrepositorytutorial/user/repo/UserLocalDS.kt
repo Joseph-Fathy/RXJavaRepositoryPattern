@@ -3,12 +3,12 @@ package com.example.rxrepositorytutorial.user.repo
 import android.util.Log
 import com.example.rxrepositorytutorial.App
 import com.example.rxrepositorytutorial.user.model.User
-import com.example.rxrepositorytutorial.base_repository.LocalDSRemove
+import com.example.rxrepositorytutorial.base_repository.LocalDS
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Observable.just
 
-class UserLocalDS : LocalDSRemove<User> {
+class UserLocalDS : LocalDS<User> {
     var dao = App.injectUserDao()
 
     override fun get(identifier: String): Observable<User> {
