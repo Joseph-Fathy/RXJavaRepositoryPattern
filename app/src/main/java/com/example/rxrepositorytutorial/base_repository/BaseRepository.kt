@@ -3,59 +3,63 @@ package com.example.rxrepositorytutorial.base_repository
 import io.reactivex.Observable
 
 open class BaseRepository<T : Any>
-    (private val api: RemoteDataSource<T>, private val db: LocalDS<T>
-     ,private val memory: LocalDS<T>, private val cachePolicy: ICachePolicy)
-{
-    fun get(identifier: String): Observable<T>
-    {
-        var apiObservable = api.get(identifier).doOnNext{db.save(it)}
+    (
+    private val api: RemoteDataSource<T>, private val db: LocalDS<T>
+    , private val memory: LocalDS<T>, private val cachePolicy: ICachePolicy
+) {
+    fun get(identifier: String): Observable<T> {
+        var apiObservable = api.get(identifier).doOnNext { db.save(it) }
         var dbObservable = db.get(identifier)
         var memoryObservable = memory.get(identifier)
 
 //        return Observable.concatArray(dbObservable, apiObservable)
-        return test(apiObservable,dbObservable,memoryObservable)
+        return getObservable(apiObservable, dbObservable, memoryObservable)
     }
 
 
-    fun getAll():Observable<List<T>>{
-        var apiObservable = api.getAll().doOnNext{db.saveAll(it).subscribe()}
+    fun getAll(): Observable<List<T>> {
+        var apiObservable = api.getAll().doOnNext {
+
+            db.saveAll(it).subscribe()
+        }
         var dbObservable = db.getAll()
         var memoryObservable = memory.getAll()
 
 
-
         //return  Observable.concatArray(dbObservable,apiObservable)
-        return test(apiObservable,dbObservable,memoryObservable)
+        return getObservable(apiObservable, dbObservable, memoryObservable)
     }
 
 
+    private fun <T> getObservable(
+        apiObservable: Observable<T>, dbObservable: Observable<T>,
+        memoryObservable: Observable<T>
+    ): Observable<T> {
 
-    fun <T>test(apiObservable:Observable<T>, dbObservable:Observable<T>, memoryObservable:Observable<T>):Observable<T>{
-
-        var returnedObservable:Observable<T>
+        var returnedObservable: Observable<T>
 
 
         when {
             //should call the api regardless there is cache or not
-            cachePolicy.shouldCallApi() -> {
+            cachePolicy.shouldGetFromApi() -> {
                 returnedObservable = apiObservable
-                if(cachePolicy.isMemoryCacheValid() && cachePolicy.isDiskCacheValid()){
-                    returnedObservable=memoryObservable
+                if (cachePolicy.shouldGetFromMemoryCache() && cachePolicy.shouldGetFromDatabase()) {
+                    returnedObservable = memoryObservable
                 }
             }
 
             //Get the data from Memory
-            cachePolicy.isMemoryCacheValid() -> {
+            cachePolicy.shouldGetFromMemoryCache() -> {
                 returnedObservable = memoryObservable
-                if(cachePolicy.shouldCallApi()&&cachePolicy.isDiskCacheValid()){
+                if (cachePolicy.shouldGetFromApi() && cachePolicy.shouldGetFromDatabase()) {
 
                 }
             }
 
             //Get the data from Database
-            cachePolicy.isDiskCacheValid() -> {
+            cachePolicy.shouldGetFromDatabase() -> {
                 returnedObservable = dbObservable
-                if(cachePolicy.isMemoryCacheValid()&&cachePolicy.shouldCallApi()){
+                if (cachePolicy.shouldGetFromMemoryCache() && cachePolicy.shouldGetFromApi()) {
 
                 }
             }

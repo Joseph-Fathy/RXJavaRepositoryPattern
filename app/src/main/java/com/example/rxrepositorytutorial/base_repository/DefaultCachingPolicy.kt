@@ -3,13 +3,13 @@ package com.example.rxrepositorytutorial.base_repository
 import com.example.rxrepositorytutorial.base_repository.ICachePolicy
 
 class DefaultCachingPolicy :ICachePolicy {
-    override fun shouldCallApi()=true
+    override fun shouldGetFromApi()=true
 
-    override fun isDiskCacheValid()=false
+    override fun shouldGetFromDatabase()=false
 
-    override fun isMemoryCacheValid()=false
+    override fun shouldGetFromMemoryCache()=false
 
-    override fun shouldUseDatabaseCache()=true
+    override fun shouldSaveInDatabase()=true
 
-    override fun shouldUseMemoryCache()=true
+    override fun shouldSaveInMemoryCache()=true
 }
