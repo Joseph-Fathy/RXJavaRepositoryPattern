@@ -2,9 +2,9 @@ package com.example.rxrepositorytutorial.app.screens.users_list.repo
 
 import com.example.rxrepositorytutorial.app.screens.users_list.model.User
 import io.reactivex.Observable
+import com.example.rxrepositorytutorial.base.repository.DataSource
 
-
-class UserMemoryDS private constructor() : LocalDS<User> {
+class UserMemoryDS private constructor() : DataSource<User>() {
 
     var userList: ArrayList<User>? = null
 
