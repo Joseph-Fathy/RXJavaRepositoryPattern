@@ -2,12 +2,12 @@ package com.example.rxrepositorytutorial.app.screens.users_list.repo
 
 import com.example.rxrepositorytutorial.app.App
 import com.example.rxrepositorytutorial.app.screens.users_list.model.User
-import com.example.rxrepositorytutorial.base.repository.LocalDS
+import com.example.rxrepositorytutorial.base.repository.DataSource
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Observable.just
 
-class UserLocalDS : LocalDS<User> {
+class UserLocalDS : DataSource<User>() {
     var dao = App.injectUserDao()
 
     override fun get(identifier: String): Observable<User> {

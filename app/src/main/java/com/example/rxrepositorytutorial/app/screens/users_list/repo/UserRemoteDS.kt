@@ -1,7 +1,6 @@
 package com.example.rxrepositorytutorial.app.screens.users_list.repo
 
 import com.example.rxrepositorytutorial.app.App
-import com.example.rxrepositorytutorial.base.repository.RemoteDataSource
 import com.example.rxrepositorytutorial.app.screens.users_list.model.User
 import io.reactivex.Observable
 

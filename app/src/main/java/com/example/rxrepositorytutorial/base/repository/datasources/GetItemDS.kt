@@ -1,10 +1,20 @@
 package com.example.rxrepositorytutorial.base.repository.datasources
 
 import io.reactivex.Observable
-
-interface GetItemWithIdentifierDS<T : Any, Identifier> {
-    fun get(identifier: Identifier): Observable<T>
+//get item without passing any parameters
+interface GetItemDS<T : Any> {
+    fun get(): Observable<T> {
+        return Observable.empty()
+    }
 }
 
-interface GetItemDS<T : Any> : GetItemWithIdentifierDS<T, String>
+//get item with passing any type of id as a parameter
+interface GetItemWithAnyIdentifierDS<T : Any, Identifier> {
+    fun get(identifier: Identifier): Observable<T> {
+        return Observable.empty()
+    }
+}
+
+//get item with passing string id as a parameter
+interface GetItemWithStringIdentifierDS<T : Any> : GetItemWithAnyIdentifierDS<T, String>
 
